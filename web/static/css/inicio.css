@@ -38,6 +38,13 @@
     margin-top: 2rem;
 }
 
+.button-wrapper a {
+    gap: 10px;
+    text-decoration: none;
+    color: var(--texto-claro);
+    font-weight: 600;
+}
+
 /* Modificación de botones del carousel */
 .btn-md {
     padding: 8px 24px;

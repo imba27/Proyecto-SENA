@@ -14,7 +14,7 @@
 <body>
     <nav class="barra-navegacion">
         <div class="marca">
-            <a href="" class="logo">
+            <a href="{% url 'inicio' %}" class="logo">
                 <img src="{% static 'img/logo_mama_susana.png' %}" alt="Logo Munchies" class="logo-img">
             </a>
         </div>
@@ -24,8 +24,8 @@
             <span class="linea"></span>
         </div>
         <div class="menu-navegacion">
-            <a href="" class="enlace-nav">Inicio</a>
-            <a href="" class="enlace-nav">Productos</a>
+            <a href="{% url 'inicio' %}" class="enlace-nav">Inicio</a>
+            <a href="{% url 'productos' %}" class="enlace-nav">Productos</a>
             <a href="" class="enlace-nav">Reservas</a>
             <a href="" class="boton-nav">Contáctanos</a>
         </div>
@@ -48,8 +48,8 @@
             </div>
             <div class="redes-sociales">
                 <a href="tel:0123456789"><i class="fas fa-phone"></i> 012 345 6789</a>
-                <a href="#"><i class="fab fa-telegram"></i> Telegram</a>
-                <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                <a href="https://www.instagram.com/chocolatemamasusana?igsh=MWE3ZTE1eTRoeHV4Yg==" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+                <a href="https://www.facebook.com/share/1Bakd4fbVq/?mibextid=wwXIfr" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
             </div>
         </div>
         <div class="pie-inferior">
