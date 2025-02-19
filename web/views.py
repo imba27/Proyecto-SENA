@@ -4,6 +4,8 @@ from django.shortcuts import render
 
 def inicio(request):
     return render (request, 'inicio.html')
+def contactanos(request):
+    return render (request, 'contactanos.html')
 
 
 from .models import Producto
