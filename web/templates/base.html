@@ -16,6 +16,7 @@
         <div class="marca">
             <a href="{% url 'inicio' %}" class="logo">
                 <img src="{% static 'img/logo_mama_susana.png' %}" alt="Logo Munchies" class="logo-img">
+                <h1>Chocolatería</h1>
             </a>
         </div>
         <div class="menu-hamburguesa">
@@ -26,25 +27,33 @@
         <div class="menu-navegacion">
             <a href="{% url 'inicio' %}" class="enlace-nav">Inicio</a>
             <a href="{% url 'productos' %}" class="enlace-nav">Productos</a>
-            <a href="" class="enlace-nav">Reservas</a>
-            <a href="{% url 'contactanos' %}" class="boton-nav">Contáctanos</a>
+            <a href="{% url 'reservas' %}" class="enlace-nav">Reservas</a>
+            <a href="{% url 'contactanos' %}" class="enlace-nav">Contáctanos</a>
+            <a href="{% url 'login' %}" class="icono-login">
+                <i class="fas fa-user"></i>
+            </a>
         </div>
     </nav>
 
-    <main>
+
+    
         {% block content %}
+        <main>
+            
+        </main>
         {% endblock %}
-    </main>
+    
 
     <footer class="pie-pagina">
         <div class="contenido-pie">
             <div class="marca-pie">
                 <img src="{% static 'img/logo_mama_susana.png' %}" alt="Logo Munchies" class="logo-pie">
+               
             </div>
             <div class="enlaces-pie">
-                <a href="">Inicio</a>
-                <a href="">Productos</a>
-                <a href="">Reservas</a>
+                <a href="{% url 'inicio' %}">Inicio</a>
+                <a href="{% url 'productos' %}">Productos</a>
+                <a href="{% url 'reservas' %}">Reservas</a>
             </div>
             <div class="redes-sociales">
                 <a href="tel:0123456789"><i class="fas fa-phone"></i> 3015968186</a>

@@ -20,10 +20,15 @@ from web import views
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.inicio, name='inicio') ,
     path('productos/', views.productos, name='productos'),
-    path('contactanos', views.contactanos, name='contactanos')
+    path('contactanos', views.contactanos, name='contactanos'),
+    path('reservas/', views.reservas, name='reservas'),
+    path('login/', views.login, name='login')
+    
+
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
