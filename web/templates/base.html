@@ -24,15 +24,26 @@
             <span class="linea"></span>
             <span class="linea"></span>
         </div>
+        {% if user.is_authenticated %}
         <div class="menu-navegacion">
             <a href="{% url 'inicio' %}" class="enlace-nav">Inicio</a>
             <a href="{% url 'productos' %}" class="enlace-nav">Productos</a>
             <a href="{% url 'reservas' %}" class="enlace-nav">Reservas</a>
             <a href="{% url 'contactanos' %}" class="enlace-nav">Contáctanos</a>
+            <a href="{% url 'logout' %}" class="icono-login">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </a>
+        </div>
+        {% else %}
+        <div class="menu-navegacion">
+            <a href="{% url 'inicio' %}" class="enlace-nav">Inicio</a>
+            <a href="{% url 'productos' %}" class="enlace-nav">Productos</a>
+            <a href="{% url 'contactanos' %}" class="enlace-nav">Contáctanos</a>
             <a href="{% url 'login' %}" class="icono-login">
                 <i class="fas fa-user"></i>
             </a>
         </div>
+        {% endif %}
     </nav>
 
 

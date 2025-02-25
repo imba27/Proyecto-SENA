@@ -1,81 +1,63 @@
-/* Estilos generales */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 15;
-    background-color: #f8f1eb;
-    color: #4a2c18;
+/* Estilos adicionales para la página de reservas */
+.reservas-card {
+    max-width: 1000px;
 }
 
-/* Encabezado y navegación */
-header {
-    background-color: #5a3e1b;
-    color: white;
-    padding: 20px;
-    text-align: center;
+.reservas-form {
+    padding: 2rem;
+    overflow-y: auto;
+    max-height: 90vh;
 }
 
-nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline;
-    margin: 0 15px;
-}
-
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-nav ul li a:hover {
-    text-decoration: underline;
-}
-
-/* Estilos del formulario */
-main {
-    max-width: 500px;
-    margin: 40px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-    text-align: center;
-    color: #5a3e1b;
-}
-
-label {
-    font-weight: bold;
+.productos-label {
+    font-weight: 500;
+    color: var(--primario-oscuro);
+    margin-bottom: 10px;
     display: block;
-    margin-top: 10px;
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
+.productos-container {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ced4da;
     border-radius: 5px;
-}
-
-button {
-    width: 100%;
     padding: 10px;
-    margin-top: 20px;
-    background-color: #5a3e1b;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
+    background-color: #f9f9f9;
 }
 
-button:hover {
-    background-color: #3e2a14;
+.producto-item {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.producto-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.reservas-previas {
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.reservas-previas h4 {
+    color: var(--primario-oscuro);
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #D7CCC8;
+    color: var(--primario-oscuro);
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(93, 64, 55, 0.25);
+    border-color: #D7CCC8;
+}
+
+@media (max-width: 768px) {
+    .reservas-form {
+        padding: 1.5rem;
+    }
 }
