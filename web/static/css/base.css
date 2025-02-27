@@ -19,7 +19,12 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: var(--fondo);
     color: var(--texto-oscuro);
-    padding-top: 70px; /* Altura del navbar */
+    padding-top: 70px; 
+}
+
+.menu-navegacion i, .menu-navegacion a{
+    text-decoration: none;
+    color: azure;
 }
 
 .barra-navegacion {
