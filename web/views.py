@@ -237,3 +237,90 @@ def eliminar_item(request, item_id):
         messages.error(request, "Item no encontrado")
         
     return redirect('ver_carrito')
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import CarritoItem, Orden, OrdenItem
+from .forms import OrdenForm
+
+def pasarela(request):
+    carrito_items = []
+    total = 0
+    
+    if request.user.is_authenticated:
+        carrito_items = CarritoItem.objects.filter(usuario=request.user)
+    else:
+        if request.session.session_key:
+            carrito_items = CarritoItem.objects.filter(sesion_id=request.session.session_key)
+    
+    if not carrito_items:
+        messages.warning(request, "Tu carrito está vacío")
+        return redirect('ver_carrito')
+    
+    for item in carrito_items:
+        total += item.subtotal()
+    
+    if request.method == 'POST':
+        form = OrdenForm(request.POST)
+        if form.is_valid():
+            orden = form.save(commit=False)
+            
+            if request.user.is_authenticated:
+                orden.usuario = request.user
+            else:
+                orden.sesion_id = request.session.session_key
+            
+            orden.total = total
+            orden.save()
+            
+            for item in carrito_items:
+                OrdenItem.objects.create(
+                    orden=orden,
+                    producto=item.producto,
+                    precio=item.producto.precio,
+                    cantidad=item.cantidad
+                )
+            
+            carrito_items.delete()
+            
+            messages.success(request, "Tu pedido ha sido procesado con éxito")
+            return redirect('confirmacion', orden_id=orden.id)
+    else:
+        initial_data = {}
+        if request.user.is_authenticated:
+            try:
+                datos = Datos.objects.get(usuario=request.user)
+                initial_data = {
+                    'nombre': f"{datos.nombre} {datos.apellido}",
+                    'email': request.user.email
+                }
+            except Datos.DoesNotExist:
+                initial_data = {
+                    'nombre': request.user.username,
+                    'email': request.user.email
+                }
+        
+        form = OrdenForm(initial=initial_data)
+    
+    return render(request, 'pasarela.html', {
+        'form': form,
+        'carrito_items': carrito_items,
+        'total': total
+    })
+
+def confirmacion(request, orden_id):
+    try:
+        if request.user.is_authenticated:
+            orden = Orden.objects.get(id=orden_id, usuario=request.user)
+        else:
+            orden = Orden.objects.get(id=orden_id, sesion_id=request.session.session_key)
+        
+        items = OrdenItem.objects.filter(orden=orden)
+        
+        return render(request, 'confirmacion.html', {
+            'orden': orden,
+            'items': items
+        })
+    except Orden.DoesNotExist:
+        messages.error(request, "Orden no encontrada")
+        return redirect('productos')
