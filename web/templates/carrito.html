@@ -74,13 +74,13 @@
             <a href="{% url 'productos' %}" class="btn btn-secondary">
                 Continuar comprando
             </a>
-            <a href="#" class="btn btn-success">
+            <a href="{% url 'pasarela' %}" class="btn btn-success">
                 Proceder al pago
             </a>
         </div>
     {% else %}
         <div class="carrito-vacio">
-            Tu carrito está vacío. <a href="{% url 'productos' %}">Empieza a comprar</a>
+            Tu carrito está vacío. <a href="{% url 'pasarela' %}">Empieza a comprar</a>
         </div>
     {% endif %}
 </div>

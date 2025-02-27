@@ -53,3 +53,20 @@ try:
     admin.site.register(CarritoItem, CarritoItemAdmin)
 except AlreadyRegistered:
     pass
+
+from .models import Orden, OrdenItem
+
+class OrdenItemInline(admin.TabularInline):
+    model = OrdenItem
+    extra = 0
+    readonly_fields = ('producto', 'precio', 'cantidad')
+
+class OrdenAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombre', 'email', 'telefono', 'total', 'pagado', 'fecha_creacion')
+    list_filter = ('pagado', 'fecha_creacion')
+    search_fields = ('nombre', 'email')
+
+try:
+    admin.site.register(Orden, OrdenAdmin)
+except AlreadyRegistered:
+    pass
