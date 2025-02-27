@@ -39,3 +39,16 @@ class Reserva(models.Model):
     
     def __str__(self):
         return f"Reserva de {self.usuario.username} - {self.fecha} {self.hora}"
+    
+class CarritoItem(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.IntegerField(default=1)
+    sesion_id = models.CharField(max_length=100, null=True, blank=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.cantidad} x {self.producto.nombre}"
+    
+    def subtotal(self):
+        return self.producto.precio * self.cantidad

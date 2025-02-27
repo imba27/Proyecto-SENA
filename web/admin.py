@@ -26,7 +26,6 @@ class ReservaAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         return qs.select_related('usuario')
 
-# Intentamos registrar cada modelo solo si no está ya registrado
 try:
     admin.site.register(Producto)
 except AlreadyRegistered:
@@ -40,6 +39,17 @@ except AlreadyRegistered:
 try:
     admin.site.register(Reserva, ReservaAdmin)
 except AlreadyRegistered:
-    # Si ya está registrado, podemos actualizar la configuración
     admin.site.unregister(Reserva)
     admin.site.register(Reserva, ReservaAdmin)
+
+from .models import CarritoItem
+
+class CarritoItemAdmin(admin.ModelAdmin):
+    list_display = ('producto', 'cantidad', 'usuario', 'sesion_id', 'fecha_creacion')
+    list_filter = ('fecha_creacion',)
+    search_fields = ('producto__nombre', 'usuario__username')
+
+try:
+    admin.site.register(CarritoItem, CarritoItemAdmin)
+except AlreadyRegistered:
+    pass

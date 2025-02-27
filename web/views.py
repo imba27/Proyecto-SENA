@@ -9,9 +9,44 @@ def contactanos(request):
     return render (request, 'contactanos.html')
 
 
-from .models import Producto
+from .models import Producto, CarritoItem
 def productos(request):
     producto_lista = Producto.objects.all()
+
+    if request.method == "POST" and 'producto_id' in request.POST:
+        producto_id = request.POST.get('producto_id')
+        try:
+            producto = Producto.objects.get(id=producto_id)
+            
+            if not request.user.is_authenticated:
+                if not request.session.session_key:
+                    request.session.create()
+                sesion_id = request.session.session_key
+                
+                carrito_item, created = CarritoItem.objects.get_or_create(
+                    producto=producto,
+                    sesion_id=sesion_id,
+                    usuario=None
+                )
+                
+                if not created:
+                    carrito_item.cantidad += 1
+                    carrito_item.save()
+            else:
+                carrito_item, created = CarritoItem.objects.get_or_create(
+                    producto=producto,
+                    usuario=request.user,
+                    sesion_id=None
+                )
+                
+                if not created:
+                    carrito_item.cantidad += 1
+                    carrito_item.save()
+            
+            messages.success(request, f"{producto.nombre} añadido al carrito")
+        except Producto.DoesNotExist:
+            messages.error(request, "Producto no encontrado")
+    
     return render(request, 'productos.html', {'productos': producto_lista})
 
 from django.core.mail import send_mail
@@ -25,16 +60,15 @@ def reservas(request):
         fecha = request.POST['fecha']
         personas = request.POST['personas']
 
-        # Enviar el correo de notificación
         subject = "Nueva Reserva Recibida"
         message = f"Nombre: {nombre}\nEmail: {email}\nFecha: {fecha}\nPersonas: {personas}"
-        from_email = 'tu_correo@gmail.com'
-        recipient_list = ['tu_correo@gmail.com']  # Aquí coloca el correo que recibirá la notificación
+        from_email = 'imbachi@gmail.com'
+        recipient_list = ['imbachi@gmail.com'] 
         
         send_mail(subject, message, from_email, recipient_list)
 
         messages.success(request, "Tu reserva ha sido enviada con éxito. ¡Nos pondremos en contacto contigo!")
-        return redirect("reservas")  # Redirecciona a la página de reservas
+        return redirect("reservas")  
 
     return render(request, "reservas.html")
 
@@ -59,10 +93,6 @@ def registrarse(request):
     return render(request, 'registrar.html', {'register_mode': True, 'form': form})
 
 def login(request):
-    """
-    Vista para el inicio de sesión.
-    Autentica a los usuarios y crea su sesión.
-    """
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -93,7 +123,6 @@ from django.contrib import messages
 
 @login_required
 def reservas(request):
-    # Obtener el nombre y apellido del usuario
     try:
         datos_usuario = Datos.objects.get(usuario=request.user)
         nombre = datos_usuario.nombre
@@ -101,8 +130,7 @@ def reservas(request):
     except Datos.DoesNotExist:
         nombre = request.user.username
         apellido = ""
-    
-    # Obtener reservas previas del usuario
+
     reservas_usuario = Reserva.objects.filter(usuario=request.user).order_by('-fecha_creacion')
     
     if request.method == "POST":
@@ -112,10 +140,8 @@ def reservas(request):
             reserva.usuario = request.user
             reserva.save()
             
-            # Para guardar la relación ManyToMany
             form.save_m2m()
             
-            # Enviar correo de notificación
             productos_text = ", ".join([p.nombre for p in form.cleaned_data['productos']])
             
             subject = "Nueva Reserva en Mamá Susana"
@@ -155,3 +181,59 @@ def reservas(request):
         'apellido': apellido,
         'reservas_previas': reservas_usuario
     })
+
+def ver_carrito(request):
+    carrito_items = []
+    total = 0
+    
+    if request.user.is_authenticated:
+        carrito_items = CarritoItem.objects.filter(usuario=request.user)
+    else:
+        if request.session.session_key:
+            carrito_items = CarritoItem.objects.filter(sesion_id=request.session.session_key)
+    
+    for item in carrito_items:
+        total += item.subtotal()
+    
+    return render(request, 'carrito.html', {
+        'carrito_items': carrito_items,
+        'total': total
+    })
+
+def actualizar_carrito(request, item_id):
+    try:
+        item = CarritoItem.objects.get(id=item_id)
+        
+        if request.user.is_authenticated and item.usuario == request.user or \
+            not request.user.is_authenticated and item.sesion_id == request.session.session_key:
+            
+            cantidad = int(request.POST.get('cantidad', 1))
+            if cantidad > 0:
+                item.cantidad = cantidad
+                item.save()
+            else:
+                item.delete()
+            
+            messages.success(request, "Carrito actualizado")
+        else:
+            messages.error(request, "No tienes permiso para modificar este item")
+    except CarritoItem.DoesNotExist:
+        messages.error(request, "Item no encontrado")
+        
+    return redirect('ver_carrito')
+
+def eliminar_item(request, item_id):
+    try:
+        item = CarritoItem.objects.get(id=item_id)
+        
+        if request.user.is_authenticated and item.usuario == request.user or \
+            not request.user.is_authenticated and item.sesion_id == request.session.session_key:
+            
+            item.delete()
+            messages.success(request, "Item eliminado del carrito")
+        else:
+            messages.error(request, "No tienes permiso para eliminar este item")
+    except CarritoItem.DoesNotExist:
+        messages.error(request, "Item no encontrado")
+        
+    return redirect('ver_carrito')
