@@ -33,6 +33,11 @@ urlpatterns = [
     path('carrito/', views.ver_carrito, name='ver_carrito'),
     path('carrito/actualizar/<int:item_id>/', views.actualizar_carrito, name='actualizar_carrito'),
     path('carrito/eliminar/<int:item_id>/', views.eliminar_item, name='eliminar_item'),
+    path('restablecer/', views.restablecer, name='restablecer'),
+    path("cambiar_contraseña/<uidb64>/<token>/", views.cambiar_contraseña, name="cambiar_contraseña"),
+    path("password_changed/", views.password_changed, name="pasword_changed"),
+    path('recuperar/', views.recuperar, name='recuperar'),
+
     
 
     

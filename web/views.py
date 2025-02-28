@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 
+
 # Create your views here.
 
 def inicio(request):
@@ -237,3 +238,57 @@ def eliminar_item(request, item_id):
         messages.error(request, "Item no encontrado")
         
     return redirect('ver_carrito')
+
+
+
+
+from django.contrib.auth.models import User 
+from django.contrib.auth.tokens import default_token_generator 
+from django.core.mail import send_mail 
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode 
+from django.utils.encoding import force_bytes, force_str
+
+def restablecer(request): 
+    if request.method == "POST": 
+        email = request.POST["email"] 
+        user = User.objects.filter(email=email).first() 
+    if user: 
+        token = default_token_generator.make_token(user) 
+        uid = urlsafe_base64_encode(force_bytes(user.pk)) 
+        enlace = request.build_absolute_uri(f"/cambiar_contraseña/{uid}/{token}/") 
+        send_mail( 
+            "Restablecimiento de contraseña", 
+            f"Haz clic en el siguiente enlace para cambiar tu contraseña: {enlace}", 
+            "jalmpa77@gmail.com", 
+            [email], 
+            fail_silently=False, 
+        )
+        messages.success (request, "Se ha enviado un enlace de restablecimiento a su correo.") 
+        return redirect("home") 
+    else: 
+        messages.error(request, "No se encontró un usuario con ese correo electrónico.") 
+        return redirect("restablecer") # Redirige de nuevo a la página de restablecimiento 
+    
+    return render(request, "restablecer.html")
+
+
+def cambiar_contraseña (request, uidb64, token): 
+    try: 
+        uid = force_str(urlsafe_base64_decode (uidb64)) 
+        user = User.objects.get(pk=uid) 
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist): 
+         user = None 
+    if user and default_token_generator.check_token(user, token): 
+        if request.method == "POST": 
+            nueva_contraseña = request.POST["password"] 
+            user.set_password(nueva_contraseña) 
+            user.save() 
+            return redirect("password_changed") 
+
+        return render(request, "cambiar_contraseña.html") 
+        
+    return redirect("login") 
+    
+
+def password_changed(request):
+    return render(request, "password_changed.html") 
