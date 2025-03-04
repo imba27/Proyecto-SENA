@@ -8,8 +8,20 @@
 {% endblock %}
 
 {% block content %}
-<!-- Carousel -->
-<section class="container text-light mt-5 rounded text-center">
+<!-- Mensajes de alerta para mostrar notificaciones al usuario -->
+{% if messages %}
+<div class="container">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Sección de contacto -->
+<section class="contenedor text-light rounded text-center">
     <div class="row justify-content-center">
         <div class="col-md-4 my-4">
             <h1>Contactanos</h1>
@@ -17,10 +29,11 @@
     </div>
     <div class="row pb-5">
        <div class="col-lg-5 ">
-           <form action="#!" class="bg-light rounded p-2 ml-lg-4 p-md-4">
-               <input type="text" class="form-control mb-2 " id="name" placeholder="Nombre">
-               <input type="email" class="form-control mb-2" id="email" placeholder="Email">
-               <textarea class="form-control mb-4" id="message" placeholder="Mensaje" rows="3"></textarea>
+           <form action="{% url 'contactanos' %}" method="POST" class="bg-light rounded p-2 ml-lg-4 p-md-4">
+               {% csrf_token %}
+               <input type="text" name="name" class="form-control mb-2" id="name" placeholder="Nombre" required>
+               <input type="email" name="email" class="form-control mb-2" id="email" placeholder="Email" required>
+               <textarea class="form-control mb-4" name="message" id="message" placeholder="Mensaje" rows="3" required></textarea>
                <input class="btn btn-primary btn-block" type="submit" value="Enviar">
            </form>
        </div>

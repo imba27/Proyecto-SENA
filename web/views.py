@@ -10,6 +10,7 @@ def contactanos(request):
     return render (request, 'contactanos.html')
 
 
+
 from .models import Producto, CarritoItem
 def productos(request):
     producto_lista = Producto.objects.all()
@@ -156,8 +157,8 @@ def reservas(request):
             Productos: {productos_text}
             Mensaje: {reserva.mensaje or 'Ninguno'}
             """
-            from_email = 'samuellemos907@gmail.com'
-            recipient_list = ['samuellemos907@gmail.com']
+            from_email = 'imbachicarvajaldanielfelipe@gmail.com'
+            recipient_list = ['imbachicarvajaldanielfelipe@gmail.com']
             
             try:
                 send_mail(subject, message, from_email, recipient_list)
@@ -239,7 +240,6 @@ def eliminar_item(request, item_id):
         
     return redirect('ver_carrito')
 
-<<<<<<< HEAD
 
 
 
@@ -253,23 +253,22 @@ def restablecer(request):
     if request.method == "POST": 
         email = request.POST["email"] 
         user = User.objects.filter(email=email).first() 
-    if user: 
-        token = default_token_generator.make_token(user) 
-        uid = urlsafe_base64_encode(force_bytes(user.pk)) 
-        enlace = request.build_absolute_uri(f"/cambiar_contraseña/{uid}/{token}/") 
-        send_mail( 
-            "Restablecimiento de contraseña", 
-            f"Haz clic en el siguiente enlace para cambiar tu contraseña: {enlace}", 
-            "jalmpa77@gmail.com", 
-            [email], 
-            fail_silently=False, 
+        if user: 
+            token = default_token_generator.make_token(user) 
+            uid = urlsafe_base64_encode(force_bytes(user.pk)) 
+            enlace = request.build_absolute_uri(f"/cambiar_contraseña/{uid}/{token}/") 
+            send_mail( 
+                "Restablecimiento de contraseña", 
+                f"Haz clic en el siguiente enlace para cambiar tu contraseña: {enlace}", 
+                "imbachicarvajaldanielfelipe@gmail.com", 
+                [email], 
+                fail_silently=False, 
         )
         messages.success (request, "Se ha enviado un enlace de restablecimiento a su correo.") 
-        return redirect("home") 
+        return redirect("inicio") 
     else: 
         messages.error(request, "No se encontró un usuario con ese correo electrónico.") 
-        return redirect("restablecer") # Redirige de nuevo a la página de restablecimiento 
-    
+
     return render(request, "restablecer.html")
 
 
@@ -279,21 +278,27 @@ def cambiar_contraseña (request, uidb64, token):
         user = User.objects.get(pk=uid) 
     except (TypeError, ValueError, OverflowError, User.DoesNotExist): 
          user = None 
-    if user and default_token_generator.check_token(user, token): 
-        if request.method == "POST": 
-            nueva_contraseña = request.POST["password"] 
-            user.set_password(nueva_contraseña) 
-            user.save() 
-            return redirect("password_changed") 
 
-        return render(request, "cambiar_contraseña.html") 
-        
-    return redirect("login") 
+    if user and default_token_generator.check_token(user, token):
+        if request.method == "POST":
+            nueva_contraseña = request.POST.get("password")
+            if nueva_contraseña:
+                user.set_password(nueva_contraseña)
+                user.save()
+                messages.success(request, "Contraseña cambiada con éxito.")
+                return redirect("password_changed")
+            else:
+                messages.error(request, "La nueva contraseña no puede estar vacía.")
+
+        return render(request, "cambiar_contraseña.html")
+
+    messages.error(request, "El enlace de restablecimiento es inválido o ha expirado.")
+    return redirect("login")
+
     
 
 def password_changed(request):
     return render(request, "password_changed.html") 
-=======
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import CarritoItem, Orden, OrdenItem
@@ -380,4 +385,54 @@ def confirmacion(request, orden_id):
     except Orden.DoesNotExist:
         messages.error(request, "Orden no encontrada")
         return redirect('productos')
->>>>>>> fa38a925adb451552b05c173be6edfa9c1c7f45e
+
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.core.mail import send_mail
+from .models import Contacto
+
+def contactanos(request):
+    if request.method == "POST":
+        nombre = request.POST.get('name')
+        email = request.POST.get('email')
+        mensaje = request.POST.get('message')
+        
+        # Guardar en la base de datos
+        contacto = Contacto.objects.create(
+            nombre=nombre,
+            email=email,
+            mensaje=mensaje
+        )
+        
+        # Enviar correo electrónico
+        subject = "Nuevo mensaje de contacto recibido"
+        message = f"""Se ha recibido un nuevo mensaje de contacto:
+        
+        Nombre: {nombre}
+        Email: {email}
+        Mensaje: {mensaje}
+        """
+        from_email = 'imbachicarvajaldanielfelipe@gmail.com'  
+        recipient_list = ['imbachicarvajaldanielfelipe@gmail.com']  
+        
+        try:
+            send_mail(subject, message, from_email, recipient_list)
+        except Exception as e:
+            print(f"Error al enviar correo: {e}")
+            
+        messages.success(request, "Tu mensaje ha sido enviado correctamente. Nos pondremos en contacto contigo pronto.")
+        return redirect('contactanos')
+        
+    return render(request, 'contactanos.html')
+
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def perfil(request):
+    return render(request, 'perfil.html')
+

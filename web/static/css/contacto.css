@@ -1,12 +1,13 @@
-.container { 
-    
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+.contenedor { 
+
     width: 100%;
     min-height: 100vh; /* Ocupa toda la altura de la pantalla */
     height: auto;
-    background-attachment: fixed;
 
-   
+}
+.contenedor {
+    background: url('/static/img/chocolate.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
