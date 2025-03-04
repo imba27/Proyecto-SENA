@@ -264,10 +264,10 @@ def restablecer(request):
                 [email], 
                 fail_silently=False, 
         )
-        messages.success (request, "Se ha enviado un enlace de restablecimiento a su correo.") 
-        return redirect("inicio") 
-    else: 
-        messages.error(request, "No se encontró un usuario con ese correo electrónico.") 
+            messages.success(request, "Se ah enviado un enlace de restablecimiento de contraseña a su correo")
+            return redirect('login')
+        else:
+            messages.success(request, "No se encontro algun usuario registrado con ese correo")
 
     return render(request, "restablecer.html")
 
@@ -286,11 +286,11 @@ def cambiar_contraseña (request, uidb64, token):
                 user.set_password(nueva_contraseña)
                 user.save()
                 messages.success(request, "Contraseña cambiada con éxito.")
-                return redirect("password_changed")
+                return redirect("login")
             else:
                 messages.error(request, "La nueva contraseña no puede estar vacía.")
 
-        return render(request, "cambiar_contraseña.html")
+        return render(request, "cambiar.html")
 
     messages.error(request, "El enlace de restablecimiento es inválido o ha expirado.")
     return redirect("login")
@@ -298,7 +298,7 @@ def cambiar_contraseña (request, uidb64, token):
     
 
 def password_changed(request):
-    return render(request, "password_changed.html") 
+    return render(request, "cambiada.html") 
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import CarritoItem, Orden, OrdenItem

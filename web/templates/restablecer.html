@@ -18,7 +18,7 @@
                     <div class="{{ message.tags }}">{{ message }}</div> 
                 {% endfor %} 
             </div> 
-{% endif %} 
+        {% endif %} 
 <form action="{% url 'restablecer' %}" method="POST"> 
             {% csrf_token %} 
             <input type="email" name="email" placeholder="Correo electrónico" required> 
@@ -27,4 +27,4 @@
         </form> 
     </div> 
 </body> 
-</html>l
+</html>
