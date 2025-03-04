@@ -10,6 +10,15 @@
 {% endblock %}
 
 {% block content %}
+{% if messages %}
+<div class="messages text-center" style="position: fixed; top: 80px; right: 20px; z-index: 1000; width: auto; max-width: 300px;">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} shadow-sm">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 <div class="register-container">
     <div class="register-card">
         <div class="register-form">
