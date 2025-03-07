@@ -88,6 +88,58 @@
     border-top: 2px solid #f0f0f0;
 }
 
+.checkout-payment {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    grid-column: span 2;
+    margin-top: 1rem;
+}
+
+.payment-options {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.payment-option {
+    text-align: center;
+    padding: 1.5rem;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    max-width: 350px;
+}
+
+.qr-container {
+    margin: 1.5rem 0;
+}
+
+.qr-code {
+    max-width: 200px;
+    height: auto;
+    margin: 0 auto 1rem;
+}
+
+.qr-info {
+    margin: 0.3rem 0;
+    font-weight: 500;
+}
+
+.payment-instructions {
+    margin-top: 1rem;
+    color: var(--primario-oscuro);
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .checkout-payment {
+        grid-column: 1;
+    }
+}
+
 @media (max-width: 768px) {
     .checkout-grid {
         grid-template-columns: 1fr;

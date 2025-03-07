@@ -50,12 +50,25 @@
                     <div class="form-error">{{ form.telefono.errors }}</div>
                     {% endif %}
                 </div>
+                <div class="checkout-payment">                
+                    <div class="payment-options">
+                        <div class="payment-option qr-payment">
+                            <h3>Pago con QR</h3>
+                            <div class="qr-container">
+                                <img src="{% static 'img/QR.png' %}" alt="QR de Pago" class="qr-code">
+                                <p class="qr-info">CHOCOLATE MAMA SUSANA SAS</p>
+                            </div>
+                            <p class="payment-instructions">Escanee este código QR para proceder al pago</p>
+                        </div>
+                    </div>
+                </div>
                 
                 <button type="submit" class="btn btn-success">
                     Confirmar Pedido
                 </button>
             </form>
         </div>
+        
         
         <div class="checkout-resumen">
             <h2 class="resumen-titulo">Resumen del Pedido</h2>
@@ -72,6 +85,7 @@
                 <div>${{ item.subtotal }}</div>
             </div>
             {% endfor %}
+            
             
             <div class="resumen-total">
                 Total: ${{ total }}
