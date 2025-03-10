@@ -334,6 +334,8 @@ def pasarela(request):
             orden.total = total
             orden.save()
             
+            # Crear los items de la orden y preparar detalles para el correo
+            productos_comprados = []
             for item in carrito_items:
                 OrdenItem.objects.create(
                     orden=orden,
@@ -341,6 +343,55 @@ def pasarela(request):
                     precio=item.producto.precio,
                     cantidad=item.cantidad
                 )
+                productos_comprados.append(f"{item.cantidad} x {item.producto.nombre} - ${item.subtotal()}")
+            
+            # Enviar correo al administrador
+            admin_subject = f"Nueva Orden #{orden.id} Recibida"
+            admin_message = f"""
+Se ha recibido una nueva orden:
+
+Número de Orden: {orden.id}
+Cliente: {orden.nombre}
+Email: {orden.email}
+Teléfono: {orden.telefono}
+Fecha: {orden.fecha_creacion.strftime('%d/%m/%Y %H:%M')}
+
+Productos:
+{chr(10).join(productos_comprados)}
+
+Total: ${orden.total}
+"""
+            admin_from_email = 'imbachicarvajaldanielfelipe@gmail.com'
+            admin_recipient_list = ['imbachicarvajaldanielfelipe@gmail.com']
+            
+            try:
+                send_mail(admin_subject, admin_message, admin_from_email, admin_recipient_list)
+            except Exception as e:
+                print(f"Error al enviar correo al administrador: {e}")
+            
+            # Enviar correo de confirmación al cliente
+            user_subject = f"Confirmación de tu Orden #{orden.id} - Mamá Susana"
+            user_message = f"""
+¡Gracias por tu compra en Mamá Susana!
+
+Tu orden #{orden.id} ha sido recibida correctamente.
+
+Detalles de la orden:
+- Fecha: {orden.fecha_creacion.strftime('%d/%m/%Y %H:%M')}
+- Total: ${orden.total}
+
+Nos pondremos en contacto contigo pronto para coordinar la entrega.
+
+Saludos,
+El equipo de Mamá Susana
+"""
+            user_from_email = 'imbachicarvajaldanielfelipe@gmail.com'
+            user_recipient_list = [orden.email]
+            
+            try:
+                send_mail(user_subject, user_message, user_from_email, user_recipient_list)
+            except Exception as e:
+                print(f"Error al enviar correo al usuario: {e}")
             
             carrito_items.delete()
             
@@ -382,9 +433,11 @@ def confirmacion(request, orden_id):
             'orden': orden,
             'items': items
         })
+    
     except Orden.DoesNotExist:
         messages.error(request, "Orden no encontrada")
         return redirect('productos')
+    
 
 
 
@@ -435,4 +488,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def perfil(request):
     return render(request, 'perfil.html')
+
+
+
 
