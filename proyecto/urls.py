@@ -45,6 +45,7 @@ urlpatterns = [
 
     
     path('pasarela/', views.pasarela, name='pasarela'),
+    path('confirmacion/<int:orden_id>/', views.confirmacion, name='confirmacion'),
 
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
