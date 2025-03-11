@@ -1,115 +1,165 @@
-
 .profile-container {
-    position: relative; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 90vh;
-    overflow: hidden; 
-    color: white;
-  }
-  
-  .profile-container::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url('/static/images/fondo9.jpg') center/cover no-repeat;
-    filter: blur(4px); /* Ajusta el nivel de desenfoque según necesites */
-    z-index: -2;
-  }
-  
+  position: relative; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  overflow: hidden; 
+  color: white;
+}
+
+.profile-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/static/img/chocolate.jpg') center/cover no-repeat;
+  filter: blur(4px);
+  z-index: -2;
+}
+
+.con {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  width: auto;
+  padding: 20px;
+  gap: 50px;
+  border-radius: 10px;
+  box-shadow: 0 10px 10px 10px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.333);
+}
+
+/* Imagen de la empresa */
+.company-image img {
+  width: 200px;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* Tarjeta del perfil */
+.profile-card {
+  padding: 30px;
+  border-radius: 12px;
+  color: black;
+  max-width: 450px;
+  width: 100%;
+}
+
+/* Encabezado del perfil */
+.profile-header {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Avatar mejorado */
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #6e45e2, #88d3ce);
+  color: white;
+  font-size: 2.8rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(110, 69, 226, 0.4);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 4px solid white;
+}
+
+.profile-avatar::before {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+  transform: rotate(45deg);
+  top: -40%;
+  left: -40%;
+  transition: all 0.5s ease;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.05) rotate(5deg);
+  box-shadow: 0 12px 25px rgba(110, 69, 226, 0.5);
+}
+
+.profile-avatar:hover::before {
+  top: 100%;
+  left: 100%;
+}
+
+.profile-header h2 {
+  margin-top: 15px;
+  color: black;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Información del usuario */
+.profile-body h3 {
+  margin-bottom: 15px;
+  color: black;
+  font-size: 20px;
+  border-bottom: 2px solid #6e45e2;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.profile-body p {
+  font-size: 16px;
+  margin: 8px 0;
+  color: black;
+}
+
+/* Botones */
+.profile-footer {
+  display: flex;
+  margin-top: 25px;
+  justify-content: center;
+}
+
+.btn.logout {
+  background-color: #ff4757;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+}
+
+.btn.logout:hover {
+  background-color: #ff6b81;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 71, 87, 0.5);
+}
+
+@media (max-width: 900px) {
   .con {
-    display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: auto;
-    width: auto;
-    padding: 20px;
-    gap: 50px;
-    border-radius: 10px;
-    box-shadow: 0 10px 10px 10px rgba(0, 0, 0, 0.2);
-    background-color: rgba(255, 255, 255, 0.333);
+    gap: 20px;
   }
-  
-  /* Imagen de la empresa */
+
   .company-image img {
-    width: 200px;
-    height: auto;
-    border-radius: 10px;
-  
-    
+    width: 90%;
+    max-width: 400px;
+    margin: 0 auto;
   }
-  
-  /* Tarjeta del perfil */
+
   .profile-card {
-    padding: 30px;
-    border-radius: 12px;
-   color: black;
+    width: 90%;
     max-width: 450px;
-    width: 100%;
+    margin: 0 auto;
   }
-  
-  /* Encabezado del perfil */
-  .profile-header {
-    margin-bottom: 20px;
-  }
-  
-  .profile-avatar {
-    width: 90px;
-    height: 90px;
-    background: #007bff;
-    color: white;
-    font-size: 2.5rem;
-    font-weight: bold;
-    display: flex;
-    border-radius: 50%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Información del usuario */
-  .profile-body h3 {
-    margin-bottom: 15px;
-    /* color: #333; */
-    color: black;
-    font-size: 20px;
-    border-bottom: 2px solid #007bff;
-    display: inline-block;
-    padding-bottom: 5px;
-  }
-  
-  .profile-body p {
-    font-size: 16px;
-    margin: 8px 0;
-    color: black;
-  }
-  
-  /* Botones */
-  .profile-footer {
-    display: flex;
-    margin-top: 25px;
-    justify-content: center;
-  }
-  @media (max-width: 900px) {
-    .con {
-      flex-direction: column; /* Apila los elementos verticalmente */
-      align-items: center;    /* Centra los elementos horizontalmente */
-      gap: 20px;              /* Espacio entre la imagen y la tarjeta */
-    }
-  
-    /* Ajusta el tamaño de la imagen para que se adapte al contenedor */
-    .company-image img {
-      width: 90%;
-      max-width: 400px;       /* Limita el ancho máximo para que no se expanda demasiado */
-      margin: 0 auto;
-    }
-  
-    /* Opcional: centra y ajusta la tarjeta de perfil */
-    .profile-card {
-      width: 90%;
-      max-width: 450px;
-      margin: 0 auto;
-    }
-  }
+}
